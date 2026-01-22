@@ -1,2 +1,2 @@
 # SRThub
-Generate SRT files &amp; Timestamped links as per your need
+Generate SRT files & Timestamped links as per your need
