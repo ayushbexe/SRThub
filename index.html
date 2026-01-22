@@ -161,6 +161,16 @@ Dialogue line"'></textarea>
 </div>
 
 <script>
+
+function showTool(toolId, btn) {
+  document.querySelectorAll(".tool").forEach(t => t.classList.add("hidden"));
+  document.getElementById(toolId + "-tool").classList.remove("hidden");
+
+  document.querySelectorAll(".nav-item").forEach(b => b.classList.remove("active"));
+  btn.classList.add("active");
+}
+
+  
 function parseEntries(text) {
   // Normalize smart quotes
   text = text
