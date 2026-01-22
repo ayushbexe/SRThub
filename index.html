@@ -120,7 +120,25 @@ th {
   background: #1a1a1a;
 }
 
+td.copyable {
+  cursor: pointer;
+  position: relative;
+}
 
+td.copyable:hover {
+  background: #1f1f1f;
+}
+
+td.copied::after {
+  content: "Copied ✓";
+  position: absolute;
+  right: 8px;
+  top: 6px;
+  font-size: 11px;
+  color: #2ecc71;
+}
+
+  
 </style>
 </head>
 
@@ -194,9 +212,22 @@ Dialogue line"'></textarea>
   style="background:#333; cursor:not-allowed;"
   onclick="generateTimestamps()"
 >
+
+<label style="display:block; margin-top:15px;">
+  Time Offset (seconds)
+</label>
+<input
+  type="number"
+  id="offset"
+  value="-3"
+  style="width:120px;"
+>
 Generate Timestamps
 </button>
 
+<p id="status" style="opacity:0.7; margin-top:10px;"></p>
+
+   
 <hr>
 
 <div id="tableContainer"></div>
@@ -209,6 +240,12 @@ Generate Timestamps
 >
 Download CSV
 </button>
+
+<button onclick="downloadChapters()">
+Download YouTube Chapters
+</button>
+
+
 </p>
     </section>
 
@@ -218,6 +255,13 @@ Download CSV
 
 <script>
 
+function copyCell(cell) {
+  navigator.clipboard.writeText(cell.textContent);
+  cell.classList.add("copied");
+  setTimeout(() => cell.classList.remove("copied"), 800);
+}
+
+  
 function showTool(toolId, btn) {
   document.querySelectorAll(".tool").forEach(t => t.classList.add("hidden"));
   document.getElementById(toolId + "-tool").classList.remove("hidden");
@@ -361,6 +405,8 @@ function secondsToTimestamp(sec) {
   return Math.max(sec, 0);
 }
 
+
+
 function generateTimestamps() {
   const yt = document.getElementById("ytLink").value.trim();
   let videoId = "";
@@ -385,7 +431,8 @@ function generateTimestamps() {
         <th>Subtitle Text</th>
         <th>Duration</th>
         <th>Start Time</th>
-        <th>Start (t-3)</th>
+        <th>Start (Adjusted)</th>
+
         <th>Timestamped Link</th>
         <th>YouTube Link</th>
       </tr>
@@ -403,36 +450,45 @@ function generateTimestamps() {
     const startSec = timeToSeconds(start);
     const endSec = timeToSeconds(end);
     const duration = endSec - startSec;
-    const startMinus3 = secondsToTimestamp(startSec - 3);
+    const offset = Number(document.getElementById("offset").value) || 0;
+    const adjustedStart = secondsToTimestamp(startSec + offset);
+
 
     const text = lines.slice(2).join(" | ");
 
-    const tsLink = `https://youtube.com/watch?v=${videoId}&t=${startMinus3}s`;
+    const tsLink = `https://youtube.com/watch?v=${videoId}&t=${adjustedStart}s`;
 
-    html += `
-      <tr>
-        <td>${text}</td>
-        <td>${duration}s</td>
-        <td>${start}</td>
-        <td>${startMinus3}s</td>
-        <td>${tsLink}</td>
-        <td>${yt}</td>
-      </tr>
-    `;
 
-    csvData.push([
-      text,
-      duration,
-      start,
-      startMinus3,
-      tsLink,
-      yt
-    ]);
+html += `
+  <tr>
+    <td class="copyable" onclick="copyCell(this)">${text}</td>
+    <td>${duration}s</td>
+    <td>${start}</td>
+    <td>${adjustedStart}s</td>
+    <td class="copyable" onclick="copyCell(this)">${tsLink}</td>
+    <td class="copyable" onclick="copyCell(this)">${yt}</td>
+  </tr>
+`;
+
+
+csvData.push([
+  text,
+  duration,
+  start,
+  adjustedStart,
+  tsLink,
+  yt
+]);
+
   });
 
   html += "</table>";
   document.getElementById("tableContainer").innerHTML = html;
   document.getElementById("downloadCSV").classList.remove("hidden");
+
+  document.getElementById("status").textContent =
+  `Processed ${csvData.length} subtitles`;
+
 }
 
 function downloadCSV() {
@@ -452,6 +508,24 @@ function downloadCSV() {
   a.click();
 }
 
+function downloadChapters() {
+  let text = "";
+
+  csvData.forEach(row => {
+    const startSeconds = row[3];
+    const title = row[0].split("|")[0];
+    const min = Math.floor(startSeconds / 60);
+    const sec = String(startSeconds % 60).padStart(2, "0");
+    text += `${min}:${sec} ${title}\n`;
+  });
+
+  const blob = new Blob([text], { type: "text/plain;charset=utf-8" });
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = "youtube_chapters.txt";
+  a.click();
+}
+  
 
 </script>
 </body>
