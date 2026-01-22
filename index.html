@@ -126,8 +126,6 @@ th {
 
 <body>
 
-<body>
-
 <div class="app">
 
   <!-- Sidebar -->
@@ -212,7 +210,7 @@ Generate Timestamps
 >
 Download CSV
 </button>
-.</p>
+</p>
     </section>
 
   </main>
@@ -366,7 +364,14 @@ function secondsToTimestamp(sec) {
 
 function generateTimestamps() {
   const yt = document.getElementById("ytLink").value.trim();
-  const videoId = yt.split("v=")[1]?.split("&")[0] || "";
+  let videoId = "";
+
+if (yt.includes("youtu.be/")) {
+  videoId = yt.split("youtu.be/")[1].split("?")[0];
+} else if (yt.includes("v=")) {
+  videoId = yt.split("v=")[1].split("&")[0];
+}
+
 
   const entries = srtText.trim().split("\n\n");
   csvData = [];
@@ -386,7 +391,11 @@ function generateTimestamps() {
   entries.forEach(e => {
     const lines = e.split("\n");
     const timeLine = lines[1];
-    const text = lines.slice(2).join(" ");
+    const text = lines
+  .slice(2)
+  .filter(l => l.trim() && !l.includes("-->"))
+  .join(" | ");
+
 
     const [start, end] = timeLine.split(" --> ");
     const startSec = timeToSeconds(start);
@@ -429,7 +438,10 @@ function downloadCSV() {
     csv += row.map(v => `"${v}"`).join(",") + "\n";
   });
 
-  const blob = new Blob([csv], { type: "text/csv;charset=utf-8" });
+  const blob = new Blob(["\uFEFF" + csv], {
+  type: "text/csv;charset=utf-8"
+});
+
   const a = document.createElement("a");
   a.href = URL.createObjectURL(blob);
   a.download = "timestamps.csv";
@@ -438,7 +450,5 @@ function downloadCSV() {
 
 
 </script>
-
-
 </body>
 </html>
