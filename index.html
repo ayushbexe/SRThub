@@ -50,7 +50,31 @@ button:hover {
 
 <body>
 
-<h1>SRThub</h1>
+<body>
+
+<div class="app">
+
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <h2 class="logo">SRThub</h2>
+
+    <nav>
+      <button class="nav-item active" onclick="showTool('srt', this)">
+        ▷ SRT Generator
+      </button>
+
+      <button class="nav-item" onclick="showTool('timestamp', this)">
+        ▷ Timestamper
+      </button>
+    </nav>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="content">
+
+    <!-- SRT TOOL -->
+    <section id="srt-tool" class="tool">
+      <h1>SRThub</h1>
 <p>Generate SRT files & timestamped links as per your need</p>
 <hr>
 
@@ -69,6 +93,18 @@ Dialogue line"'></textarea>
 
 <br>
 <button onclick="downloadSRT()">Download .srt</button>
+
+    </section>
+
+    <!-- TIMESTAMP TOOL (placeholder only) -->
+    <section id="timestamp-tool" class="tool hidden">
+      <h2>Timestamper</h2>
+      <p>Coming soon.</p>
+    </section>
+
+  </main>
+
+</div>
 
 <script>
 function parseEntries(text) {
