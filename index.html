@@ -138,6 +138,10 @@ td.copied::after {
   color: #2ecc71;
 }
 
+#exportBar button {
+  margin-right: 10px;
+}
+
   
 </style>
 </head>
@@ -229,20 +233,15 @@ Dialogue line"'></textarea>
    
 <hr>
 
+<div id="exportBar" class="hidden" style="margin: 15px 0;">
+  <button onclick="downloadCSV()">Download CSV</button>
+  <button onclick="downloadChapters()">Download Chapters</button>
+</div>
+
 <div id="tableContainer"></div>
 
-<br>
-<button
-  id="downloadCSV"
-  class="hidden"
-  onclick="downloadCSV()"
->
-Download CSV
-</button>
-
-<button onclick="downloadChapters()">
-Download YouTube Chapters
-</button>
+      
+<div id="tableContainer"></div>
 
 
 </p>
@@ -483,7 +482,8 @@ csvData.push([
 
   html += "</table>";
   document.getElementById("tableContainer").innerHTML = html;
-  document.getElementById("downloadCSV").classList.remove("hidden");
+  document.getElementById("exportBar").classList.remove("hidden");
+
 
   document.getElementById("status").textContent =
   `Processed ${csvData.length} subtitles`;
