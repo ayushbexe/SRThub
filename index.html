@@ -69,13 +69,49 @@ Dialogue line"'></textarea>
 <button onclick="downloadSRT()">Download .srt</button>
 
 <script>
-function parseQuotedBlocks(text) {
-  const regex = /"([\\s\\S]*?)"/g;
-  let match, blocks = [];
-  while ((match = regex.exec(text)) !== null) {
-    blocks.push(match[1].trim());
+function parseEntries(text) {
+  // Normalize smart quotes
+  text = text
+    .replace(/[“”]/g, '"')
+    .replace(/[‘’]/g, "'");
+
+  const lines = text.split("\n");
+  const entries = [];
+
+  let buffer = [];
+  let insideQuotes = false;
+
+  for (let line of lines) {
+    line = line.trim();
+    if (!line) continue;
+
+    // Start quoted block
+    if (line.startsWith('"') && !insideQuotes) {
+      insideQuotes = true;
+      buffer.push(line.slice(1));
+      continue;
+    }
+
+    // End quoted block
+    if (line.endsWith('"') && insideQuotes) {
+      buffer.push(line.slice(0, -1));
+      entries.push(buffer.join("\n"));
+      buffer = [];
+      insideQuotes = false;
+      continue;
+    }
+
+    // Inside quoted block
+    if (insideQuotes) {
+      buffer.push(line);
+      continue;
+    }
+
+    // Normal line
+    entries.push(line);
   }
-  return blocks;
+
+  return entries;
 }
 
 function secondsToTime(sec) {
@@ -88,10 +124,11 @@ function secondsToTime(sec) {
 function generateSRT() {
   const input = document.getElementById("input").value;
   const duration = Number(document.getElementById("duration").value);
-  const blocks = parseQuotedBlocks(input);
+
+  const blocks = parseEntries(input);
 
   if (!blocks.length) {
-    alert("No quoted blocks found");
+    alert("No subtitle entries found");
     return;
   }
 
@@ -112,13 +149,14 @@ function downloadSRT() {
   const text = document.getElementById("output").value;
   if (!text) return;
 
-  const blob = new Blob([text], { type: "text/plain" });
+  const blob = new Blob([text], { type: "text/plain;charset=utf-8" });
   const a = document.createElement("a");
   a.href = URL.createObjectURL(blob);
   a.download = "SRThub.srt";
   a.click();
 }
 </script>
+
 
 </body>
 </html>
