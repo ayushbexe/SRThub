@@ -210,22 +210,26 @@ Dialogue line"'></textarea>
 
 <br>
 
-<button
-  id="generateBtn"
-  disabled
-  style="background:#333; cursor:not-allowed;"
-  onclick="generateTimestamps()"
->
-
 <label style="display:block; margin-top:15px;">
   Time Offset (seconds)
 </label>
+
 <input
   type="number"
   id="offset"
   value="-3"
   style="width:120px;"
 >
+
+<br>
+
+<button
+  id="generateBtn"
+  disabled
+  style="background:#333; cursor:not-allowed;"
+  onclick="generateTimestamps()"
+>
+Generate Timestamps
 </button>
 
 <p id="status" style="opacity:0.7; margin-top:10px;"></p>
@@ -240,10 +244,6 @@ Dialogue line"'></textarea>
 
 <div id="tableContainer"></div>
 
-      
-<div id="tableContainer"></div>
-
-
 </p>
     </section>
 
@@ -252,6 +252,11 @@ Dialogue line"'></textarea>
 </div>
 
 <script>
+
+let srtText = "";
+let csvData = [];
+let srtBaseName = "timestamps"; // fallback name
+
 
 function copyCell(cell) {
   navigator.clipboard.writeText(cell.textContent);
@@ -363,14 +368,14 @@ function downloadSRT() {
   a.click();
 }
 
-let srtText = "";
-let csvData = [];
 
 document.getElementById("srtFile").addEventListener("change", function(e) {
   const file = e.target.files[0];
   if (!file) return;
 
-  document.getElementById("fileName").textContent = `Loaded: ${file.name}`;
+document.getElementById("fileName").textContent = `Loaded: ${file.name}`;
+srtBaseName = file.name.replace(/\.srt$/i, "");
+
 
   const reader = new FileReader();
   reader.onload = () => {
@@ -503,7 +508,7 @@ function downloadCSV() {
 
   const a = document.createElement("a");
   a.href = URL.createObjectURL(blob);
-  a.download = "timestamps.csv";
+  a.download = `${srtBaseName}_SRThub.csv`;
   a.click();
 }
 
