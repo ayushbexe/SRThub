@@ -2,30 +2,64 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>SRThub – Smart Subtitle Generator</title>
+<title>SRThub</title>
+
 <style>
-body { font-family: Arial, sans-serif; padding: 20px; max-width: 900px; margin: auto; }
-textarea { width: 100%; min-height: 200px; margin-top: 10px; }
-input { padding: 6px; width: 80px; }
-button { padding: 10px 20px; margin-top: 10px; cursor: pointer; }
-h1 { margin-bottom: 5px; }
-small { color: #555; }
+body {
+  background: #0e0e0e;
+  color: #eaeaea;
+  font-family: system-ui, sans-serif;
+  padding: 40px;
+  max-width: 900px;
+  margin: auto;
+}
+
+textarea {
+  width: 100%;
+  min-height: 180px;
+  background: #141414;
+  color: #eee;
+  border: 1px solid #333;
+  padding: 12px;
+  margin-top: 10px;
+}
+
+input {
+  background: #141414;
+  color: #fff;
+  border: 1px solid #333;
+  padding: 6px;
+}
+
+button {
+  margin-top: 14px;
+  padding: 10px 22px;
+  background: #1f1f1f;
+  color: #fff;
+  border: 1px solid #444;
+  cursor: pointer;
+}
+
+button:hover {
+  background: #2a2a2a;
+}
 </style>
 </head>
 
 <body>
 
 <h1>SRThub</h1>
-<small>Smart SRT generator for subtitle editors</small>
+<p>Generate SRT files & timestamped links as per your need</p>
+<hr>
 
-<h3>Paste your text</h3>
-<textarea id="input" placeholder='Paste quoted multi-line entries here'></textarea>
+<h3>Paste quoted subtitle text</h3>
+<textarea id="input" placeholder='"Speaker
+Dialogue line"'></textarea>
 
-<h3>Settings</h3>
-Seconds per subtitle:
+<h3>Seconds per subtitle</h3>
 <input type="number" id="duration" value="5" min="1">
 
-<br><br>
+<br>
 <button onclick="generateSRT()">Generate SRT</button>
 
 <h3>Generated SRT</h3>
@@ -36,10 +70,8 @@ Seconds per subtitle:
 
 <script>
 function parseQuotedBlocks(text) {
-  const regex = /"([\s\S]*?)"/g;
-  let match;
-  const blocks = [];
-
+  const regex = /"([\\s\\S]*?)"/g;
+  let match, blocks = [];
   while ((match = regex.exec(text)) !== null) {
     blocks.push(match[1].trim());
   }
@@ -55,26 +87,22 @@ function secondsToTime(sec) {
 
 function generateSRT() {
   const input = document.getElementById("input").value;
-  const duration = parseInt(document.getElementById("duration").value);
-
+  const duration = Number(document.getElementById("duration").value);
   const blocks = parseQuotedBlocks(input);
+
   if (!blocks.length) {
-    alert("No quoted entries found");
+    alert("No quoted blocks found");
     return;
   }
 
-  let currentTime = 0;
+  let time = 0;
   let srt = "";
 
   blocks.forEach((block, i) => {
-    const start = secondsToTime(currentTime);
-    const end = secondsToTime(currentTime + duration);
-
     srt += `${i + 1}\n`;
-    srt += `${start} --> ${end}\n`;
+    srt += `${secondsToTime(time)} --> ${secondsToTime(time + duration)}\n`;
     srt += `${block}\n\n`;
-
-    currentTime += duration;
+    time += duration;
   });
 
   document.getElementById("output").value = srt.trim();
@@ -82,17 +110,13 @@ function generateSRT() {
 
 function downloadSRT() {
   const text = document.getElementById("output").value;
-  if (!text) return alert("Nothing to download");
+  if (!text) return;
 
-  const blob = new Blob([text], { type: "text/plain;charset=utf-8" });
-  const url = URL.createObjectURL(blob);
-
+  const blob = new Blob([text], { type: "text/plain" });
   const a = document.createElement("a");
-  a.href = url;
+  a.href = URL.createObjectURL(blob);
   a.download = "SRThub.srt";
   a.click();
-
-  URL.revokeObjectURL(url);
 }
 </script>
 
