@@ -149,12 +149,20 @@ function downloadSRT() {
   const text = document.getElementById("output").value;
   if (!text) return;
 
+  let filename = prompt("Enter file name (without .srt):", "SRThub");
+
+  if (filename === null) return; // user cancelled
+
+  filename = filename.trim();
+  if (!filename) filename = "SRThub";
+
   const blob = new Blob([text], { type: "text/plain;charset=utf-8" });
   const a = document.createElement("a");
   a.href = URL.createObjectURL(blob);
-  a.download = "SRThub.srt";
+  a.download = `${filename}.srt`;
   a.click();
 }
+
 </script>
 
 
