@@ -173,7 +173,6 @@ Dialogue line"'></textarea>
     <!-- TIMESTAMP TOOL (placeholder only) -->
     <section id="timestamp-tool" class="tool hidden">
       <h2>Timestamper</h2>
-      <p><h2>Timestamper</h2>
 
 <!-- Upload SRT -->
 <input type="file" id="srtFile" accept=".srt">
@@ -366,42 +365,47 @@ function generateTimestamps() {
   const yt = document.getElementById("ytLink").value.trim();
   let videoId = "";
 
-if (yt.includes("youtu.be/")) {
-  videoId = yt.split("youtu.be/")[1].split("?")[0];
-} else if (yt.includes("v=")) {
-  videoId = yt.split("v=")[1].split("&")[0];
-}
+  if (yt.includes("youtu.be/")) {
+    videoId = yt.split("youtu.be/")[1].split("?")[0];
+  } else if (yt.includes("v=")) {
+    videoId = yt.split("v=")[1].split("&")[0];
+  }
 
+  // Normalize line endings
+  const clean = srtText.replace(/\r/g, "").trim();
 
-  const entries = srtText.trim().split("\n\n");
+  // Split by subtitle index (1\n, 2\n, etc.)
+  const blocks = clean.split(/\n(?=\d+\n)/);
+
   csvData = [];
 
   let html = `
-  <table>
-    <tr>
-      <th>Subtitle Text</th>
-      <th>Duration</th>
-      <th>Start Time</th>
-      <th>Start (t-3)</th>
-      <th>Timestamped Link</th>
-      <th>YouTube Link</th>
-    </tr>
+    <table>
+      <tr>
+        <th>Subtitle Text</th>
+        <th>Duration</th>
+        <th>Start Time</th>
+        <th>Start (t-3)</th>
+        <th>Timestamped Link</th>
+        <th>YouTube Link</th>
+      </tr>
   `;
 
-  entries.forEach(e => {
-    const lines = e.split("\n");
-    const timeLine = lines[1];
-    const text = lines
-  .slice(2)
-  .filter(l => l.trim() && !l.includes("-->"))
-  .join(" | ");
+  blocks.forEach(block => {
+    const lines = block.split("\n").filter(Boolean);
 
+    if (lines.length < 3) return; // invalid block, skip
+
+    const timeLine = lines[1];
+    if (!timeLine.includes("-->")) return;
 
     const [start, end] = timeLine.split(" --> ");
     const startSec = timeToSeconds(start);
     const endSec = timeToSeconds(end);
     const duration = endSec - startSec;
     const startMinus3 = secondsToTimestamp(startSec - 3);
+
+    const text = lines.slice(2).join(" | ");
 
     const tsLink = `https://youtube.com/watch?v=${videoId}&t=${startMinus3}s`;
 
