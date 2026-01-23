@@ -615,7 +615,8 @@ async function runTransliteration(btn) {
     } else {
       // HI → EN using Sanscript (pure transliteration, NOT translation)
       // make sure the Sanscript lib is loaded in <head>
-      result = Sanscript.t(input, "devanagari", "itrans"); 
+      result = Sanscript.transliterate(input, "devanagari", "itrans");
+ 
       // alternative method: Sanscript.transliterate(input, "devanagari", "itrans");
       // either `.t` or `.transliterate` should work depending on the version; try `.t` if `.transliterate` errors
     }
