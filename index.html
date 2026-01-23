@@ -364,6 +364,15 @@ function transliterateHindiToEnglish(text) {
   }).join('\n');
 }
 
+function sanitizeText(text) {
+  return text
+    // zero-width characters
+    .replace(/[\u200B-\u200D\uFEFF]/g, "")
+    // nukta
+    .replace(/\u093C/g, "")
+    // normalize unicode (important!)
+    .normalize("NFC");
+}
 
 
 function copyCell(cell) {
@@ -639,7 +648,9 @@ function downloadChapters() {
 }
 
 async function runTransliteration(btn) {
-  const input = document.getElementById("transInput").value.trim();
+  const rawInput = document.getElementById("transInput").value;
+  const input = sanitizeText(rawInput.trim());
+
   const output = document.getElementById("transOutput");
   const dir = document.getElementById("transDirection").value;
 
@@ -672,7 +683,8 @@ async function runTransliteration(btn) {
 }
 
 
-    output.value = result;
+    output.value = sanitizeText(result);
+
   } catch (err) {
     console.error(err);
     output.value = "⚠️ Transliteration failed.";
