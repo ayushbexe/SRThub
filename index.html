@@ -3,10 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>SRThub</title>
-
-  <!-- Sanscript for HI → EN -->
-  <script src="https://cdn.jsdelivr.net/npm/sanscript@1.0.1/sanscript.min.js"></script>
-
+  
   <style>
 body {
   background: #0e0e0e;
@@ -311,6 +308,39 @@ let srtText = "";
 let csvData = [];
 let srtBaseName = "timestamps"; // fallback name
 
+// =======================
+// Hindi → English MAP
+// =======================
+const hiToEnMap = {
+  'क':'k','ख':'kh','ग':'g','घ':'gh','ङ':'ng',
+  'च':'ch','छ':'chh','ज':'j','झ':'jh','ञ':'ny',
+  'ट':'t','ठ':'th','ड':'d','ढ':'dh','ण':'n',
+  'त':'t','थ':'th','द':'d','ध':'dh','न':'n',
+  'प':'p','फ':'ph','ब':'b','भ':'bh','म':'m',
+  'य':'y','र':'r','ल':'l','व':'v',
+  'श':'sh','ष':'sh','स':'s','ह':'h',
+
+  'ा':'a','ि':'i','ी':'i','ु':'u','ू':'u',
+  'े':'e','ै':'ai','ो':'o','ौ':'au',
+  'ं':'n','ः':'h','्':'',
+
+  'अ':'a','आ':'aa','इ':'i','ई':'i',
+  'उ':'u','ऊ':'u','ए':'e','ऐ':'ai',
+  'ओ':'o','औ':'au','ऋ':'ri'
+
+function transliterateHindiToEnglish(text) {
+  return text
+    .split('\n')
+    .map(line =>
+      line
+        .split('')
+        .map(char => hiToEnMap[char] || char)
+        .join('')
+        .replace(/\b\w/g, c => c.toUpperCase())
+    )
+    .join('\n');
+}
+
 
 function copyCell(cell) {
   navigator.clipboard.writeText(cell.textContent);
@@ -613,8 +643,10 @@ async function runTransliteration(btn) {
 
       result = data[1][0][1][0];
     } else {
-      result = Sanscript.t(input, "devanagari", "itrans");
-    }
+  // Hindi → English (OFFLINE, SAFE)
+  result = transliterateHindiToEnglish(input);
+}
+
 
     output.value = result;
   } catch (err) {
