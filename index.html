@@ -11,6 +11,12 @@
   display: flex;
   align-items: center;
   gap: 8px;
+  background: none;
+  border: none;
+  color: #888;
+  cursor: pointer;
+  font-size: 15px;
+  transition: color 0.15s ease, transform 0.15s ease;
 }
 
 /* hide arrow by default */
@@ -21,6 +27,11 @@
   color: #FFB20F;
 }
 
+/* HOVER state */
+.nav-item:hover {
+  color: #FFB20F;
+}
+    
 /* show arrow on hover */
 .nav-item:hover .arrow {
   opacity: 1;
@@ -34,7 +45,17 @@
 }
 
 /* slight zoom on hover/active */
-.nav-item:hover .label,
+    
+.nav-item:hover .label {
+  transform: scale(1.04);
+},
+
+/* ACTIVE (selected) state */
+.nav-item.active {
+  color: #FFB20F;
+}
+
+    
 .nav-item.active .label {
   transform: scale(1.03);
   color: #fff;
@@ -264,11 +285,11 @@ td.copied::after {
   </h1>
 
   <p style="opacity:0.8; font-size:16px; max-width:520px;">
-    A fast, creator-first toolkit for subtitles, timestamps, and transliteration.
+    Fast, creator-first toolkit for subtitles, timestamps, and transliteration.
   </p>
 
   <p style="margin-top:20px; opacity:0.6;">
-    No uploads • No tracking • Runs entirely in your browser
+    No uploads saved • No data tracking • Runs entirely in your browser
   </p>
 </section>
 
