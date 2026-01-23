@@ -4,11 +4,10 @@
   <meta charset="UTF-8">
   <title>SRThub</title>
 
-  window.Sanscript !== undefined
+  <!-- Sanscript for HI → EN -->
+  <script src="https://cdn.jsdelivr.net/npm/sanscript@1.0.1/sanscript.min.js"></script>
 
-</head>
-
-<style>
+  <style>
 body {
   background: #0e0e0e;
   color: #eaeaea;
@@ -149,6 +148,10 @@ td.copied::after {
 
   
 </style>
+</head>
+
+
+
 </head>
 
 <body>
@@ -610,27 +613,23 @@ async function runTransliteration(btn) {
       const res = await fetch(url);
       const data = await res.json();
 
-      if (data[0] !== "SUCCESS") {
-        throw new Error("EN → HI failed");
-      }
+      if (data[0] !== "SUCCESS") throw new Error("EN→HI failed");
 
       result = data[1][0][1][0];
     } else {
-      // ✅ Hindi → English (PURE transliteration, offline)
       result = Sanscript.t(input, "devanagari", "itrans");
     }
 
     output.value = result;
-
   } catch (err) {
     console.error(err);
-    output.value =
-      "⚠️ Transliteration failed.\nCheck input text or reload the page.";
+    output.value = "⚠️ Transliteration failed.";
   } finally {
     btn.disabled = false;
     btn.textContent = "Transliterate";
   }
 }
+
 
 
 
