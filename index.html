@@ -5,6 +5,46 @@
   <title>SRThub</title>
   
   <style>
+
+/* Arrow behavior */
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* hide arrow by default */
+.nav-item .arrow {
+  opacity: 0;
+  transform: translateX(-6px);
+  transition: opacity 0.15s ease, transform 0.15s ease;
+  color: #FFB20F;
+}
+
+/* show arrow on hover */
+.nav-item:hover .arrow {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* keep arrow visible if active */
+.nav-item.active .arrow {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* slight zoom on hover/active */
+.nav-item:hover .label,
+.nav-item.active .label {
+  transform: scale(1.03);
+  color: #fff;
+}
+
+.nav-item .label {
+  transition: transform 0.15s ease, color 0.15s ease;
+}
+
+    
 body {
   background: #0e0e0e;
   color: #eaeaea;
@@ -232,6 +272,7 @@ td.copied::after {
   </p>
 </section>
 
+    
 
     <!-- SRT TOOL -->
     <section id="srt-tool" class="tool hidden">
