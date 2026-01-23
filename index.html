@@ -590,38 +590,47 @@ async function runTransliteration() {
     return;
   }
 
-  // Disable button while loading
   btn.disabled = true;
   btn.textContent = "Transliterating…";
 
   try {
-    const langPair = dir === "en-hi" ? "en|hi" : "hi|en";
+    let result = "";
 
-    const url =
-      "https://inputtools.google.com/request?text=" +
-      encodeURIComponent(input) +
-      "&itc=" +
-      (dir === "en-hi" ? "hi-t-i0-und" : "en-t-i0-und") +
-      "&num=1";
+    // ✅ English → Hindi (phonetic)
+    if (dir === "en-hi") {
+      const url =
+        "https://inputtools.google.com/request?text=" +
+        encodeURIComponent(input) +
+        "&itc=hi-t-i0-und&num=1";
 
-    const res = await fetch(url);
-    const data = await res.json();
+      const res = await fetch(url);
+      const data = await res.json();
 
-    if (data[0] !== "SUCCESS") {
-      throw new Error("API failure");
+      if (data[0] !== "SUCCESS") {
+        throw new Error("Transliteration failed");
+      }
+
+      result = data[1][0][1][0];
     }
 
-    // Extract transliterated text
-    const result = data[1][0][1][0];
+    // ✅ Hindi → English (translate fallback)
+    else {
+      const url =
+        "https://translate.googleapis.com/translate_a/single?client=gtx&sl=hi&tl=en&dt=t&q=" +
+        encodeURIComponent(input);
+
+      const res = await fetch(url);
+      const data = await res.json();
+
+      result = data[0].map(item => item[0]).join("");
+    }
+
     output.value = result;
   } catch (err) {
     console.error(err);
-
-    // Error-safe fallback
     output.value =
-      "⚠️ Transliteration failed.\n\nCheck internet connection or try again.";
+      "⚠️ Transliteration failed.\nCheck internet connection or input text.";
   } finally {
-    // Re-enable button
     btn.disabled = false;
     btn.textContent = "Transliterate";
   }
