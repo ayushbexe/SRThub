@@ -257,7 +257,7 @@ Generate Timestamps
 <!-- TRANSLITERATION TOOL -->
 <section id="transliterate-tool" class="tool hidden">
   <h2>Transliteration</h2>
-  <p>Hindi ↔ English transliteration tool</p>
+  <p>Hindi ↔ English transliteration</p>
 
   <h3>Input</h3>
   <textarea
@@ -265,16 +265,23 @@ Generate Timestamps
     placeholder="Type or paste text here..."
   ></textarea>
 
+  <!-- ACTION BAR (TOP, ALWAYS VISIBLE) -->
+  <div id="transActions" style="margin: 15px 0;">
+    <button onclick="runTransliteration()">
+      Transliterate
+    </button>
+
+    <button onclick="copyTransOutput()">
+      Copy Output
+    </button>
+  </div>
+
   <h3>Output</h3>
   <textarea
     id="transOutput"
     placeholder="Transliterated text will appear here..."
     readonly
   ></textarea>
-
-  <p style="opacity:0.6; margin-top:10px;">
-    (Logic coming soon)
-  </p>
 </section>
 
     
@@ -560,7 +567,19 @@ function downloadChapters() {
   a.download = "youtube_chapters.txt";
   a.click();
 }
-  
+
+function runTransliteration() {
+  alert("Transliteration logic coming next");
+}
+
+function copyTransOutput() {
+  const out = document.getElementById("transOutput").value;
+  if (!out) return;
+
+  navigator.clipboard.writeText(out);
+  alert("Copied");
+}
+
 
 </script>
 </body>
