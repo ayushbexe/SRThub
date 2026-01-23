@@ -584,6 +584,7 @@ function downloadChapters() {
   a.click();
 }
 
+<script>
 async function runTransliteration(btn) {
   const input = document.getElementById("transInput").value.trim();
   const output = document.getElementById("transOutput");
@@ -610,12 +611,12 @@ async function runTransliteration(btn) {
       const data = await res.json();
 
       if (data[0] !== "SUCCESS") {
-        throw new Error("Transliteration failed (EN→HI)");
+        throw new Error("EN → HI failed");
       }
 
       result = data[1][0][1][0];
     } else {
-      // Hindi → English (pure transliteration)
+      // ✅ Hindi → English (PURE transliteration, offline)
       result = Sanscript.t(input, "devanagari", "itrans");
     }
 
@@ -624,7 +625,7 @@ async function runTransliteration(btn) {
   } catch (err) {
     console.error(err);
     output.value =
-      "⚠️ Transliteration failed.\nCheck internet connection or input text.";
+      "⚠️ Transliteration failed.\nCheck input text or reload the page.";
   } finally {
     btn.disabled = false;
     btn.textContent = "Transliterate";
