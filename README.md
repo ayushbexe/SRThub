@@ -101,5 +101,5 @@ Free to use, modify, and distribute.
 
 ## 🙌 Credits
 
-Built by Ayush Bhargav & ChatGPT (this description is also a ChatGPT lol)
+Built by Ayush Bhargav — with a little code help from ChatGPT 🤝
 For creators who just want things to work.
