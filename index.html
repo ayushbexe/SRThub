@@ -4,7 +4,8 @@
   <meta charset="UTF-8">
   <title>SRThub</title>
 
-  <script src="https://unpkg.com/indic-transliteration@1.9.6/dist/browser/indic-transliteration.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sanscript@1.0.1/sanscript.min.js"></script>
+
 </head>
 
 <style>
@@ -612,10 +613,11 @@ async function runTransliteration(btn) {
       if (data[0] !== "SUCCESS") throw new Error("Transliteration failed (EN→HI)");
 
       result = data[1][0][1][0];
-    } else {
-      // HI → EN using Sanscript (pure transliteration, NOT translation)
-      // make sure the Sanscript lib is loaded in <head>
-      result = Sanscript.transliterate(input, "devanagari", "itrans");
+    } 
+     else {
+            result = Sanscript.t(input, "devanagari", "itrans");
+          }
+
  
       // alternative method: Sanscript.transliterate(input, "devanagari", "itrans");
       // either `.t` or `.transliterate` should work depending on the version; try `.t` if `.transliterate` errors
