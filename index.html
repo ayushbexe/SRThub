@@ -267,6 +267,17 @@ Generate Timestamps
 
   <!-- ACTION BAR (TOP, ALWAYS VISIBLE) -->
   <div id="transActions" style="margin: 15px 0;">
+
+    <label style="display:block; margin-top:10px;">
+  Direction
+</label>
+
+<select id="transDirection">
+  <option value="en-hi">English → Hindi</option>
+  <option value="hi-en">Hindi → English</option>
+</select>
+
+    
     <button onclick="runTransliteration()">
       Transliterate
     </button>
@@ -568,9 +579,54 @@ function downloadChapters() {
   a.click();
 }
 
-function runTransliteration() {
-  alert("Transliteration logic coming next");
+async function runTransliteration() {
+  const input = document.getElementById("transInput").value.trim();
+  const output = document.getElementById("transOutput");
+  const btn = event.target;
+  const dir = document.getElementById("transDirection").value;
+
+  if (!input) {
+    alert("Please enter text");
+    return;
+  }
+
+  // Disable button while loading
+  btn.disabled = true;
+  btn.textContent = "Transliterating…";
+
+  try {
+    const langPair = dir === "en-hi" ? "en|hi" : "hi|en";
+
+    const url =
+      "https://inputtools.google.com/request?text=" +
+      encodeURIComponent(input) +
+      "&itc=" +
+      (dir === "en-hi" ? "hi-t-i0-und" : "en-t-i0-und") +
+      "&num=1";
+
+    const res = await fetch(url);
+    const data = await res.json();
+
+    if (data[0] !== "SUCCESS") {
+      throw new Error("API failure");
+    }
+
+    // Extract transliterated text
+    const result = data[1][0][1][0];
+    output.value = result;
+  } catch (err) {
+    console.error(err);
+
+    // Error-safe fallback
+    output.value =
+      "⚠️ Transliteration failed.\n\nCheck internet connection or try again.";
+  } finally {
+    // Re-enable button
+    btn.disabled = false;
+    btn.textContent = "Transliterate";
+  }
 }
+
 
 function copyTransOutput() {
   const out = document.getElementById("transOutput").value;
