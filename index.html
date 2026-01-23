@@ -163,6 +163,11 @@ td.copied::after {
       <button class="nav-item" onclick="showTool('timestamp', this)">
         ▷ Timestamper
       </button>
+      
+      <button class="nav-item" onclick="showTool('transliterate', this)">
+  ▷ Transliterate
+</button>
+
     </nav>
   </aside>
 
@@ -249,6 +254,30 @@ Generate Timestamps
 </p>
     </section>
 
+<!-- TRANSLITERATION TOOL -->
+<section id="transliterate-tool" class="tool hidden">
+  <h2>Transliteration</h2>
+  <p>Hindi ↔ English transliteration tool</p>
+
+  <h3>Input</h3>
+  <textarea
+    id="transInput"
+    placeholder="Type or paste text here..."
+  ></textarea>
+
+  <h3>Output</h3>
+  <textarea
+    id="transOutput"
+    placeholder="Transliterated text will appear here..."
+    readonly
+  ></textarea>
+
+  <p style="opacity:0.6; margin-top:10px;">
+    (Logic coming soon)
+  </p>
+</section>
+
+    
   </main>
 
 </div>
