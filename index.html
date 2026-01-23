@@ -65,7 +65,9 @@ button:hover {
 
 /* Navigation buttons */
 .nav-item {
-  display: block;
+  display: flex;
+  align-items: center;
+  gap: 8px;
   width: 100%;
   background: none;
   border: none;
@@ -74,7 +76,40 @@ button:hover {
   padding: 10px 0;
   cursor: pointer;
   font-size: 15px;
+  transition: transform 0.2s ease, color 0.2s ease;
 }
+
+/* Arrow hidden by default */
+.nav-item .arrow {
+  opacity: 0;
+  transform: translateX(-6px);
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  color: #ffb20f;
+}
+
+/* Hover effect */
+.nav-item:hover {
+  color: #fff;
+  transform: scale(1.04);
+}
+
+/* Show arrow on hover */
+.nav-item:hover .arrow {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* Active item */
+.nav-item.active {
+  color: #fff;
+  font-weight: 600;
+}
+
+.nav-item.active .arrow {
+  opacity: 1;
+  transform: translateX(0);
+}
+
 
 .nav-item:hover {
   color: #fff;
@@ -157,17 +192,21 @@ td.copied::after {
     <h2 class="logo">SRThub</h2>
 
     <nav>
-      <button class="nav-item active" onclick="showTool('srt', this)">
-        ▷ SRT Generator
-      </button>
-
-      <button class="nav-item" onclick="showTool('timestamp', this)">
-        ▷ Timestamper
-      </button>
-      
-      <button class="nav-item" onclick="showTool('transliterate', this)">
-  ▷ Transliterate
+     <button class="nav-item active" onclick="showTool('srt', this)">
+  <span class="arrow">▷</span>
+  <span class="label">SRT Generator</span>
 </button>
+
+<button class="nav-item" onclick="showTool('timestamp', this)">
+  <span class="arrow">▷</span>
+  <span class="label">Timestamper</span>
+</button>
+
+<button class="nav-item" onclick="showTool('transliterate', this)">
+  <span class="arrow">▷</span>
+  <span class="label">Transliterate</span>
+</button>
+
 
     </nav>
   </aside>
