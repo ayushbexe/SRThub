@@ -189,7 +189,10 @@ td.copied::after {
 
   <!-- Sidebar -->
   <aside class="sidebar">
-    <h2 class="logo">SRThub</h2>
+    <h2 class="logo" onclick="goHome()" style="cursor:pointer;">
+  SRThub
+</h2>
+
 
     <nav>
      <button class="nav-item active" onclick="showTool('srt', this)">
@@ -214,8 +217,24 @@ td.copied::after {
   <!-- Main Content -->
   <main class="content">
 
+    <!-- HOME TOOL -->
+<section id="home-tool" class="tool">
+  <h1 style="font-size: 36px; margin-bottom: 10px;">
+    SRThub
+  </h1>
+
+  <p style="opacity:0.8; font-size:16px; max-width:520px;">
+    A fast, creator-first toolkit for subtitles, timestamps, and transliteration.
+  </p>
+
+  <p style="margin-top:20px; opacity:0.6;">
+    No uploads • No tracking • Runs entirely in your browser
+  </p>
+</section>
+
+
     <!-- SRT TOOL -->
-    <section id="srt-tool" class="tool">
+    <section id="srt-tool" class="tool hidden">
       <h1>SRT Generator</h1>
 <p>Generate SRT files & timestamped links as per your need</p>
 <hr>
@@ -418,6 +437,15 @@ function copyCell(cell) {
   navigator.clipboard.writeText(cell.textContent);
   cell.classList.add("copied");
   setTimeout(() => cell.classList.remove("copied"), 800);
+}
+
+function goHome() {
+  document.querySelectorAll(".tool").forEach(t => t.classList.add("hidden"));
+  document.getElementById("home-tool").classList.remove("hidden");
+
+  document.querySelectorAll(".nav-item").forEach(b =>
+    b.classList.remove("active")
+  );
 }
 
   
