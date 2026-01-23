@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
+<head> <script> src="https://unpkg.com/indic-transliteration@1.9.6/dist/browser/indic-transliteration.min.js"></script>
+</head> 
 <meta charset="UTF-8">
 <title>SRThub</title>
 
@@ -614,16 +615,10 @@ async function runTransliteration() {
     }
 
     // ✅ Hindi → English (translate fallback)
-    else {
-      const url =
-        "https://translate.googleapis.com/translate_a/single?client=gtx&sl=hi&tl=en&dt=t&q=" +
-        encodeURIComponent(input);
-
-      const res = await fetch(url);
-      const data = await res.json();
-
-      result = data[0].map(item => item[0]).join("");
-    }
+   else {
+  // Pure Hindi → English transliteration (NO translation)
+  result = indicTransliteration.transliterate(input, "devanagari", "itrans");
+}
 
     output.value = result;
   } catch (err) {
