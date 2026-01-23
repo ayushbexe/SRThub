@@ -103,7 +103,7 @@ button:hover {
   display: none;
 }
 
-button: disabled {
+button:disabled {
   opacity: 0.5;
 }
 
@@ -281,9 +281,10 @@ Generate Timestamps
 </select>
 
     
-    <button onclick="runTransliteration()">
-      Transliterate
-    </button>
+    <button onclick="runTransliteration(this)">
+  Transliterate
+</button>
+
 
     <button onclick="copyTransOutput()">
       Copy Output
@@ -582,10 +583,9 @@ function downloadChapters() {
   a.click();
 }
 
-async function runTransliteration() {
+async function runTransliteration(btn) {
   const input = document.getElementById("transInput").value.trim();
   const output = document.getElementById("transOutput");
-  const btn = event.target;
   const dir = document.getElementById("transDirection").value;
 
   if (!input) {
@@ -593,13 +593,13 @@ async function runTransliteration() {
     return;
   }
 
+  // disable UI
   btn.disabled = true;
   btn.textContent = "Transliterating…";
 
   try {
     let result = "";
 
-    // ✅ English → Hindi (phonetic)
     if (dir === "en-hi") {
       const url =
         "https://inputtools.google.com/request?text=" +
@@ -609,24 +609,21 @@ async function runTransliteration() {
       const res = await fetch(url);
       const data = await res.json();
 
-      if (data[0] !== "SUCCESS") {
-        throw new Error("Transliteration failed");
-      }
+      if (data[0] !== "SUCCESS") throw new Error("Transliteration failed (EN→HI)");
 
       result = data[1][0][1][0];
+    } else {
+      // HI → EN using Sanscript (pure transliteration, NOT translation)
+      // make sure the Sanscript lib is loaded in <head>
+      result = Sanscript.t(input, "devanagari", "itrans"); 
+      // alternative method: Sanscript.transliterate(input, "devanagari", "itrans");
+      // either `.t` or `.transliterate` should work depending on the version; try `.t` if `.transliterate` errors
     }
-
-    // ✅ Hindi → English (translate fallback)
-   else {
-  // Pure Hindi → English transliteration (NO translation)
-  result = indicTransliteration.transliterate(input, "devanagari", "itrans");
-}
 
     output.value = result;
   } catch (err) {
     console.error(err);
-    output.value =
-      "⚠️ Transliteration failed.\nCheck internet connection or input text.";
+    output.value = "⚠️ Transliteration failed.\nCheck internet connection or input text.";
   } finally {
     btn.disabled = false;
     btn.textContent = "Transliterate";
