@@ -594,7 +594,6 @@ async function runTransliteration(btn) {
     return;
   }
 
-  // disable UI
   btn.disabled = true;
   btn.textContent = "Transliterating…";
 
@@ -610,27 +609,27 @@ async function runTransliteration(btn) {
       const res = await fetch(url);
       const data = await res.json();
 
-      if (data[0] !== "SUCCESS") throw new Error("Transliteration failed (EN→HI)");
+      if (data[0] !== "SUCCESS") {
+        throw new Error("Transliteration failed (EN→HI)");
+      }
 
       result = data[1][0][1][0];
-    } 
-     else {
-            result = Sanscript.t(input, "devanagari", "itrans");
-          }
-
- 
-      // alternative method: Sanscript.transliterate(input, "devanagari", "itrans");
-      // either `.t` or `.transliterate` should work depending on the version; try `.t` if `.transliterate` errors
+    } else {
+      // Hindi → English (pure transliteration)
+      result = Sanscript.t(input, "devanagari", "itrans");
     }
 
     output.value = result;
+
   } catch (err) {
     console.error(err);
-    output.value = "⚠️ Transliteration failed.\nCheck internet connection or input text.";
+    output.value =
+      "⚠️ Transliteration failed.\nCheck internet connection or input text.";
   } finally {
     btn.disabled = false;
     btn.textContent = "Transliterate";
   }
+}
 }
 
 
