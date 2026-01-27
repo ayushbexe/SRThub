@@ -263,9 +263,49 @@ td.copied::after {
   opacity: 0.8;
 }
 
+/* Dark themed select (Direction dropdown) */
 #transDirection {
-  margin-right: 12px;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+
+  background: #141414;
+  color: #fff;
+  border: 1px solid #444;
+  padding: 8px 36px 8px 12px;
+  font-family: 'Space Grotesk', system-ui, sans-serif;
+  font-size: 14px;
+  cursor: pointer;
+
+  background-image: url("data:image/svg+xml;utf8,<svg fill='%23FFB20F' height='20' viewBox='0 0 24 24' width='20' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/></svg>");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  background-size: 16px;
+
+  transition: border 0.15s ease, background 0.15s ease;
 }
+
+/* Hover */
+#transDirection:hover {
+  border-color: #FFB20F;
+}
+
+/* Focus */
+#transDirection:focus {
+  outline: none;
+  border-color: #FFB20F;
+}
+
+/* Dropdown options */
+#transDirection option {
+  background: #141414;
+  color: #fff;
+}
+
+#transDirection {
+  border-radius: 4px;
+}
+
 
 #ytLink {
   
