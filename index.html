@@ -263,6 +263,14 @@ td.copied::after {
   color: #FFB20F;
   opacity:0.8;
 }
+
+.subhead {
+  color: #FFB20F;
+  adding: 40px;
+  max-width: 900px;
+  margin: auto;
+
+}
     
   
 </style>
@@ -346,17 +354,17 @@ If you demand a tool that delivers performance—cleanly, quickly, and locally�
       <h2>Subtitle Generator (.srt)</h2>
 <hr>
 
-<h3>Paste subtitle text / Quoted multi-line text )</h3>
+<h3 class="subhead">Paste subtitle text / Quoted multi-line text )</h3>
 <textarea id="input" placeholder='"Speaker
 Dialogue line"'></textarea>
 
-<h3>Seconds per subtitle</h3>
+<h3 class="subhead">Seconds per subtitle</h3>
 <input type="number" id="duration" value="20" min="1">
 
 <br>
 <button onclick="generateSRT()">Generate SRT</button>
 
-<h3>Generated Subtitles</h3>
+<h3 class="subhead">Generated Subtitles</h3>
 <textarea id="output"></textarea>
 
 <br>
@@ -384,7 +392,7 @@ Dialogue line"'></textarea>
 
 <br>
 
-<label style="display:block; margin-top:15px;">
+<label  class="subhead" style="display:block; margin-top:15px;">
   Time Offset (seconds)
 </label>
 
@@ -425,9 +433,9 @@ Generate Timestamps
 <section id="transliterate-tool" class="tool hidden">
   <h2>Transliteration</h2>
   <hr>
-  <p>Hindi ↔ English transliteration</p>
+  <p >Hindi ↔ English transliteration</p>
 
-  <h3>Input</h3>
+  <h3  class="subhead">Input</h3>
   <textarea
     id="transInput"
     placeholder="Type or paste text here..."
@@ -436,7 +444,7 @@ Generate Timestamps
   <!-- ACTION BAR (TOP, ALWAYS VISIBLE) -->
   <div id="transActions" style="margin: 15px 0;">
 
-    <label style="display:block; margin-top:10px;">
+    <label class="subhead" style="display:block; margin-top:10px;">
   Direction
 </label>
 
@@ -456,7 +464,7 @@ Generate Timestamps
     </button>
   </div>
 
-  <h3>Output</h3>
+  <h3  class="subhead">Output</h3>
   <textarea
     id="transOutput"
     placeholder="Transliterated text will appear here..."
