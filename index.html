@@ -11,16 +11,20 @@
   
   <style>
 /* Arrow behavior */
+
 .nav-item {
   display: flex;
   align-items: center;
   gap: 8px;
+  width: 100%;
   background: none;
   border: none;
-  color: #888;
+  color: #aaa;
+  text-align: left;
+  padding: 10px 0;
   cursor: pointer;
   font-size: 15px;
-  transition: color 0.15s ease, transform 0.15s ease;
+  transition: transform 0.2s ease, color 0.2s ease;
 }
 
 /* hide arrow by default */
@@ -52,7 +56,7 @@
     
 .nav-item:hover .label {
   transform: scale(1.04);
-},
+}
 
 /* ACTIVE (selected) state */
 .nav-item.active {
@@ -132,20 +136,7 @@ button:hover {
 }
 
 /* Navigation buttons */
-.nav-item {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  width: 100%;
-  background: none;
-  border: none;
-  color: #aaa;
-  text-align: left;
-  padding: 10px 0;
-  cursor: pointer;
-  font-size: 15px;
-  transition: transform 0.2s ease, color 0.2s ease;
-}
+
 
 /* Arrow hidden by default */
 .nav-item .arrow {
@@ -203,37 +194,37 @@ button:hover {
   display: none;
 }
 
-.button:disabled {
+button:disabled {
   opacity: 0.5;
 }
 
-.table {
+table {
   width: 100%;
   border-collapse: collapse;
   margin-top: 20px;
   font-size: 14px;
 }
 
-.th, td {
+th, td {
   border: 1px solid #333;
   padding: 8px;
   text-align: left;
 }
 
-.th {
+th {
   background: #1a1a1a;
 }
 
-.td.copyable {
+td.copyable {
   cursor: pointer;
   position: relative;
 }
 
-.td.copyable:hover {
+td.copyable:hover {
   background: #1f1f1f;
 }
 
-.td.copied::after {
+td.copied::after {
   content: "Copied ✓";
   position: absolute;
   right: 8px;
@@ -266,7 +257,6 @@ button:hover {
 
 .subhead {
   color: #FFB20F;
-  adding: 40px;
   max-width: 900px;
   margin: auto;
   padding-bottom:8px;
@@ -276,7 +266,10 @@ button:hover {
 #transDirection {
   padding-right: 12px;
 }
-    
+
+#ytLink {
+  
+}
     
   
 </style>
